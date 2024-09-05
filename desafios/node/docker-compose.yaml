@@ -22,8 +22,6 @@ services:
       - node-challenge-network
     volumes:
       - ./node:/usr/src/app
-    ports:
-      - "3000:3000"
     tty: true
     depends_on:
       - db
