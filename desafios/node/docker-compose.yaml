@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: nginx-challenge
+    networks:
+      - node-challenge-network
+    ports:
+      - "8080:80"
+    tty: true
+    volumes:
+      - ./nginx:/usr/share/nginx/html
+  app:
+    build:
+      context: ./node
+      dockerfile: Dockerfile
+    container_name: node-challenge
+    networks:
+      - node-challenge-network
+    volumes:
+      - ./node:/usr/src/app
+    ports:
+      - "3000:3000"
+    tty: true
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    command: --innodb_use_native_aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - "./mysql:/var/lib/mysql"
+    environment:
+      MYSQL_DATABASE: nodedb-challenge
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - node-challenge-network
+
+networks:
+  node-challenge-network:
+    driver: bridge
