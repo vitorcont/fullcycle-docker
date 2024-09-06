@@ -13,6 +13,8 @@ services:
     tty: true
     volumes:
       - ./nginx:/usr/share/nginx/html
+    depends_on:
+      - app
   app:
     build:
       context: ./node
