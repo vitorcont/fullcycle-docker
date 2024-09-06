@@ -1,13 +1,13 @@
 FROM golang:1.23-alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY ./hello.go ./hello.go
 COPY ./go.mod ./go.mod
 
-RUN go build
+RUN go build -ldflags "-w"
 
 FROM scratch
 
-COPY --from=builder /usr/src/app/hello /hello
+COPY --from=builder /app /
 
 ENTRYPOINT ["/hello"]
